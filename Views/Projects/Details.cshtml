@@ -1,0 +1,40 @@
+﻿@model ProjectManagementApp.Models.Project
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 class="mb-4">Project Details</h1>
+
+<div class="card p-4 shadow-sm">
+    <h4>Project Information</h4>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-3"><strong>@Html.DisplayNameFor(model => model.Name)</strong></dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+        <dt class="col-sm-3"><strong>@Html.DisplayNameFor(model => model.Description)</strong></dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+
+        <dt class="col-sm-3"><strong>@Html.DisplayNameFor(model => model.Company)</strong></dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Company)</dd>
+
+        <dt class="col-sm-3"><strong>@Html.DisplayNameFor(model => model.Status)</strong></dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Status)</dd>
+
+        <dt class="col-sm-3"><strong>@Html.DisplayNameFor(model => model.UserId)</strong></dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.UserId)</dd>
+    </dl>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning btn-sm">Edit</a> |
+    <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

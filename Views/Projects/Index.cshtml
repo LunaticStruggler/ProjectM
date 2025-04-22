@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ProjectManagementApp.Models.Project>
+
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<h2 class="mb-4">Projects</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Create New Project</a>
+
+<div class="row">
+    @foreach (var project in Model)
+    {
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@project.Name</h5>
+                    <p class="card-text">@project.Description</p>
+                    <p><strong>Company:</strong> @project.Company</p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge @(GetStatusClass(project.Status))">
+                            @project.Status
+                        </span>
+                    </p>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Edit" asp-route-id="@project.Id" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-action="Details" asp-route-id="@project.Id" class="btn btn-info btn-sm">Details</a>
+                        <a asp-action="Delete" asp-route-id="@project.Id" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@functions {
+    public string GetStatusClass(string status)
+    {
+        return status switch
+        {
+            "Not Started" => "badge bg-danger",  
+            "Ongoing" => "badge bg-warning text-dark", 
+            "Completed" => "badge bg-success", 
+            _ => "badge bg-secondary" 
+        };
+    }
+}
