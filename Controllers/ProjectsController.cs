@@ -24,24 +24,27 @@ namespace ProjectManagementApp.Controllers
             _userManager = userManager;
         }
 
-        
-        public async Task<IActionResult> Index()
+        // Updaterad för att inkludera statusfilter
+        public async Task<IActionResult> Index(string statusFilter = null)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null) return Challenge(); 
+            if (currentUser == null) return Challenge();
 
-            return View(await _context.Projects
-                .Where(p => p.UserId == currentUser.Id)
-                .ToListAsync());
+            var projectsQuery = _context.Projects
+                .Where(p => p.UserId == currentUser.Id);
+
+            if (!string.IsNullOrEmpty(statusFilter) && statusFilter != "All")
+            {
+                projectsQuery = projectsQuery.Where(p => p.Status == statusFilter);
+            }
+
+            var projects = await projectsQuery.ToListAsync();
+            return View(projects);
         }
 
-        
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return Challenge();
@@ -49,21 +52,16 @@ namespace ProjectManagementApp.Controllers
             var project = await _context.Projects
                 .FirstOrDefaultAsync(m => m.Id == id && m.UserId == currentUser.Id);
 
-            if (project == null)
-            {
-                return NotFound();
-            }
+            if (project == null) return NotFound();
 
             return View(project);
         }
 
-        
         public IActionResult Create()
         {
             return View();
         }
 
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Company,Status")] Project project)
@@ -81,7 +79,6 @@ namespace ProjectManagementApp.Controllers
             return View(project);
         }
 
-        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -90,15 +87,11 @@ namespace ProjectManagementApp.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return Challenge();
 
-            if (project == null || project.UserId != currentUser.Id)
-            {
-                return NotFound();
-            }
+            if (project == null || project.UserId != currentUser.Id) return NotFound();
 
             return View(project);
         }
 
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Company,Status,UserId")] Project project)
@@ -112,13 +105,11 @@ namespace ProjectManagementApp.Controllers
             {
                 try
                 {
-                    
                     var existingProject = await _context.Projects
                         .FirstOrDefaultAsync(p => p.Id == id && p.UserId == currentUser.Id);
 
                     if (existingProject == null) return NotFound();
 
-                    
                     existingProject.Name = project.Name;
                     existingProject.Description = project.Description;
                     existingProject.Company = project.Company;
@@ -137,25 +128,21 @@ namespace ProjectManagementApp.Controllers
             return View(project);
         }
 
-        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
 
             var project = await _context.Projects
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return Challenge();
 
-            if (project == null || project.UserId != currentUser.Id)
-            {
-                return NotFound();
-            }
+            if (project == null || project.UserId != currentUser.Id) return NotFound();
 
             return View(project);
         }
 
-        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

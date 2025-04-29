@@ -38,9 +38,9 @@
                 <label asp-for="Status" class="control-label"></label>
                 <select asp-for="Status" class="form-control">
                     <option value="">Select Status</option>
-                    <option value="Ongoing">Active</option>
+                    <option value="Not Started">Not Started</option>
+                    <option value="Ongoing">Ongoing</option>
                     <option value="Completed">Completed</option>
-                    <option value="Not Started">On Hold</option>
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>

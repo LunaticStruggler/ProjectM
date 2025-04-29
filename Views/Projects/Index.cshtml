@@ -8,6 +8,27 @@
 
 <a asp-action="Create" class="btn btn-primary mb-3">Create New Project</a>
 
+<!-- FILTER TABS -->
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link @(string.IsNullOrEmpty(Context.Request.Query["statusFilter"]) || Context.Request.Query["statusFilter"] == "All" ? "active" : "")"
+           asp-action="Index" asp-route-statusFilter="All">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Context.Request.Query["statusFilter"] == "Not Started" ? "active" : "")"
+           asp-action="Index" asp-route-statusFilter="Not Started">Not Started</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Context.Request.Query["statusFilter"] == "Ongoing" ? "active" : "")"
+           asp-action="Index" asp-route-statusFilter="Ongoing">Ongoing</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Context.Request.Query["statusFilter"] == "Completed" ? "active" : "")"
+           asp-action="Index" asp-route-statusFilter="Completed">Completed</a>
+    </li>
+</ul>
+
+<!-- PROJECT CARDS -->
 <div class="row">
     @foreach (var project in Model)
     {
@@ -17,7 +38,6 @@
                     <h5 class="card-title">@project.Name</h5>
                     <p class="card-text">@project.Description</p>
                     <p><strong>Company:</strong> @project.Company</p>
-
                     <p>
                         <strong>Status:</strong>
                         <span class="badge @(GetStatusClass(project.Status))">
@@ -41,10 +61,10 @@
     {
         return status switch
         {
-            "Not Started" => "badge bg-danger",  
-            "Ongoing" => "badge bg-warning text-dark", 
-            "Completed" => "badge bg-success", 
-            _ => "badge bg-secondary" 
+            "Not Started" => "badge bg-danger",
+            "Ongoing" => "badge bg-warning text-dark",
+            "Completed" => "badge bg-success",
+            _ => "badge bg-secondary"
         };
     }
 }
