@@ -1,0 +1,2 @@
+A basic projectmanagement application with login and logout functions that save the users changes. It uses authentication and authorization so that the projects are user specific and can only be accessed if the correct user logs in. This was kinda difficult as i had to redo the logout function a lot because it wasn't working, but as always i eventually got through it and succeeded.
+Although it took long enough i couldn't quite replicate the visual look 1:1 with figma, i tried my best to make it look clean and passable.
